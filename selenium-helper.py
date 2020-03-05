@@ -2,8 +2,6 @@ import sys
 import time
 from random import randint
 from selenium import webdriver
-from config import Configuration
-from utils import LogHelper
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
@@ -37,7 +35,10 @@ class SeleniumHelper:
 			self.driver = webdriver.Firefox(profile)
 		elif driverType == 'headless':
 			dcap = dict(DesiredCapabilities.PHANTOMJS)
-			dcap["phantomjs.page.settings.userAgent"] = Configuration.selenium_user_agent
+			dcap["phantomjs.page.settings.userAgent"] = (
+			    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.12; rv:45.0) " +
+			    "Gecko/20100101 Firefox/45.0"
+			)
 			self.driver = webdriver.PhantomJS(desired_capabilities=dcap)
 		else:
 			self.driver = webdriver.Firefox()
@@ -367,7 +368,7 @@ class SeleniumHelper:
 		try:
 			cookies = self.driver.get_cookies()
 		except:
-			LogHelper.log(sys.exc_info())
+			print(sys.exc_info())
 		if cookies:
 			return cookies
 		else:
@@ -379,7 +380,7 @@ class SeleniumHelper:
 		try:
 			cookies = self.driver.get_cookies()
 		except:
-			LogHelper.log(sys.exc_info())
+			print(sys.exc_info())
 		return cookies
 
 	def setCookies(self, cookies):
